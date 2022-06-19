@@ -1,5 +1,11 @@
 import React, { useEffect } from 'react';
 import './Home.scss';
+
+// New React Component
+import Header from '../../Components/Header/Header';
+import IqomahClock from '../../Components/IqomahClock/IqomahClock';
+import PrayTimes from '../../Components/PrayTimes/PrayTimes';
+
 // import View1 from '../Views/View 1/View1';
 // import View2 from '../Views/View 2/View2';
 // import View3 from '../Views/View 3/View3';
@@ -10,11 +16,6 @@ import './Home.scss';
 // import config from '../config.json';
 // import BlackoutPeriods from '../_components/blackout-periods/blackout-periods';
 // import AppConfig from '../_components/app-config/app-config';
-
-// New React Component
-import Header from '../../Components/Header/Header';
-import IqomahClock from '../../Components/IqomahClock/IqomahClock';
-import PrayTimes from '../../Components/PrayTimes/PrayTimes';
 
 // import Logo from '../_components/logo/logo';
 // import PrayerTimes from '../_components/prayer-times/prayer-times';
