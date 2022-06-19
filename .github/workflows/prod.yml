@@ -1,0 +1,44 @@
+name: Production - Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: main
+      APP_NAME: masjid-jam-digital
+      PATH: www/www/masjid-al-suwardi
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install NPM packages
+        run: npm ci
+
+      - name: Build project
+        run: CI=false npm run build
+
+      # - name: Run tests
+      #   run: yarn run test
+
+      - name: Rsync to server *DANGER AREA* !!!! be careful
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          tar -zcf ${{ env.APP_NAME }}.tar.gz build
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT }}" ./${{ env.APP_NAME }}.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/${{ env.PATH }}/${{ env.APP_NAME }}
+          ssh -A -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "cd /home/${{ secrets.SSH_USER }}/${{ env.PATH }}/${{ env.APP_NAME }} && tar -xzf ${{ env.APP_NAME }}.tar.gz && rm -rf ${{ env.APP_NAME }}.tar.gz"
+
+www/www/masjid-al-suwardi/jam-digital/
