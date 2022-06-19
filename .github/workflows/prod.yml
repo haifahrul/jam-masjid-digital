@@ -24,7 +24,7 @@ jobs:
           node-version: '14'
 
       - name: Install NPM packages
-        run: npm ci
+        run: npm i
 
       - name: Build project
         run: CI=false npm run build
