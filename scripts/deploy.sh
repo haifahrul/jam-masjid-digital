@@ -1,0 +1,3 @@
+tar -zcf web-festival.tar.gz .next public package.json package-lock.json node_modules
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{ secrets.SSH_PORT }}" ./${{ env.APP_NAME }}.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/apps/${{ env.APP_ENV }}/${{ env.APP_NAME }}
+          ssh -A -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "cd /home/${{ secrets.SSH_USER }}/apps/${{ env.APP_ENV }}/${{ env.APP_NAME }} && tar -xzf ${{ env.APP_NAME }}.tar.gz && rm -rf ${{ env.APP_NAME }}.tar.gz"
